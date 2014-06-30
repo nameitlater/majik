@@ -14,30 +14,48 @@ class NodeEventType {
   static const NodeEventType REMOVED = const NodeEventType._();
 }
 
-class NodeEvent {
+class Backend {
+   final NodeType type;
+   final String host;
+   final int port;
+   final Map labels;
+   final int weight;
+   
+   Backend(this.type, this.host, this.port, this.labels, this.weight);
+}
+
+class BackendEvent {
   final NodeEventType type;
-  final Node node;
+  final Backend node;
   
-  NodeEvent(this.type, this.node);
+  BackendEvent(this.type, this.node);
   
 }
 
-class Node {
+class Frontend {
    final NodeType type;
    final String host;
    final int port;
    final Map labels;
    
-   Node(this.type, this.host, this.port, this.labels);
+   Frontend(this.type, this.host, this.port, this.labels);
+}
+
+class FrontendEvent {
+  final NodeEventType type;
+  final Frontend node;
+  
+  FrontendEvent(this.type, this.node);
+  
 }
 
 abstract class FrontendRegistration {
-  Stream<NodeEvent> watchBackends();
+  Stream<FrontendEvent> watchBackends();
   cancel();
 }
 
 abstract class BackendRegistration {
-  Stream<NodeEvent> watchFrontends();
+  Stream<BackendEvent> watchFrontends();
   cancel();
 }
 
